@@ -79,3 +79,4 @@ $ed = $MadelineProto->messages->editMessage(['peer' => $chatID, 'id' => $msg_id,
     catch(\danog\MadelineProto\TL\Conversion\Exception $e){
     }
 });
+?>
