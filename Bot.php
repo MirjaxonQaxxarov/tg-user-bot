@@ -5,7 +5,7 @@ if (!file_exists('madeline.php')) {
 }
 include 'madeline.php';
 
-$MadelineProto = new \danog\MadelineProto\API('session.madeline');
+$MadelineProto = new \danog\MadelineProto\API('JD.madeline');
 $MadelineProto->async(true);
 $MadelineProto->loop(function () use ($MadelineProto) {
      $MadelineProto->start();
@@ -21,7 +21,7 @@ $chatID = $chatID['bot_api_id'];
 $userID = $update['update']['message']['from_id'];
 $msg = $update['update']['message']['message'];
 $msg_id = $update['update']['message']['id'];
-$date=file_get_contents("send$userID.txt");
+$date=file_get_contents("send.txt");
 $list=json_decode(file_get_contents("users.db"));
 $users=$list->userID;
 if($msg){
@@ -35,34 +35,26 @@ if($msg){
 }
 
 if($msg == "/send"){
- $Conf = json_decode(file_get_contents('Config.json'));
-$Conf->Enemy = 1;
-file_put_contents('Config.json', json_encode($Conf));
-file_put_contents("send$userID.txt","sett");
+ 
+file_put_contents("send.txt","sett");
 $ed = $MadelineProto->messages->editMessage(['peer' => $chatID, 'id' => $msg_id, 'message' =>'Yubormoqchi bulgan xabaringizni yozing!  Bekor qilish uchun /cancelni yuboring!', 'parse_mode' => 'MarkDown' ]);
 }
 
 if($msg == "/cancel"&& $date=="sett"){
-file_put_contents("send$userID.txt","");
-$Conf = json_decode(file_get_contents('Config.json'));
-$Conf->Enemy = 1;
+file_put_contents("send.txt","");
 $ed = $MadelineProto->messages->editMessage(['peer' => $chatID, 'id' => $msg_id, 'message' =>'Yuborish Bekor qilindi! ', 'parse_mode' => 'MarkDown' ]);
 }
 elseif($msg && $date=="sett"){
    foreach ($users as $key => $value) {
-        $date=file_get_contents("send$userID.txt");
-        $Conf = json_decode(file_get_contents('Config.json'));
-        $Conf->Enemy = 1;
+        $date=file_get_contents("send.txt");
         $ed = $MadelineProto->messages->sendMessage(['peer' => $value, 'message' =>$msg, 'parse_mode' => 'MarkDown' ]);
         if($date=="sett")
-        $date=file_put_contents("send$userID.txt","");
+        $date=file_put_contents("send.txt","");
    }
 }
 
 
 if($msg == "/memb"){
- $Conf = json_decode(file_get_contents('Config.json'));
-$Conf->Enemy = 1;
 $txs=count($users);
 $ed = $MadelineProto->messages->editMessage(['peer' => $chatID, 'id' => $msg_id, 'message' =>$txs, 'parse_mode' => 'MarkDown' ]);
 }
